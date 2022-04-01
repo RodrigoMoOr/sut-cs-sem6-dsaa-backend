@@ -1,0 +1,11 @@
+image: node:16.14.2
+
+pipelines:
+  branches:
+    feature/*:
+      - step:
+          caches:
+            - node
+          script:
+            - npm install
+            - npm test
