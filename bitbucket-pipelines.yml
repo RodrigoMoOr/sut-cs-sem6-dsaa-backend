@@ -9,3 +9,16 @@ pipelines:
           script:
             - npm install
             - npm test
+    develop:
+      - step:
+          caches:
+            - node
+          script:
+            - npm install
+            - npm test
+      - step:
+          caches:
+            - node
+          script:
+          - npm install
+          - npm build
