@@ -1,24 +1,63 @@
+# Image of NodeJS to be use (general for all pipeline)
 image: node:16.14.2
 
 pipelines:
   branches:
+    # CI pipeline that will run on all feature branches
     feature/*:
       - step:
+          name: Run Unit Tests
           caches:
             - node
           script:
             - npm install
-            - npm test
+            - npm run test
+
+    # CI Pipeline that will run on develop branch (when PRs are merged from feature branches -> develop)
     develop:
       - step:
+          name: Run Unit Tests
           caches:
             - node
           script:
             - npm install
-            - npm test
+            - npm run test
       - step:
+          name: Compile Application
           caches:
             - node
           script:
-          - npm install
-          - npm build
+            - npm install
+            - npm run build
+
+    # CD Pipeline to deploy app to Heroku
+    master:
+      - step:
+          name: Run Unit Tests
+          caches:
+            - node
+          script:
+            - npm install
+            - npm run test
+      - step:
+          name: Compile Application
+          caches:
+            - node
+          script:
+            - npm install
+            - npm run build
+      - step:
+          name: Create App Artifact for Deployment
+          script:
+            - tar czfv application.tgz dist/
+      - step:
+          name: Deploy to Heroku
+          deployment: production
+          caches:
+            - node
+          script:
+            - pipe: atlassian/heroku-deploy:0.1.1
+              variables:
+                HEROKU_API_KEY: $HEROKU_API_KEY
+                HEROKU_APP_NAME: $HEROKU_APP_NAME
+                ZIP_FILE: 'application.tgz'
