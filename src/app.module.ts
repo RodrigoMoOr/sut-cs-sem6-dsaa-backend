@@ -6,9 +6,17 @@ import { UserModule } from './modules/user/user.module';
 import { PaymentModule } from './modules/payment/payment.module';
 import { CartModule } from './modules/cart/cart.module';
 import { LibraryModule } from './modules/library/library.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [AuthModule, UserModule, PaymentModule, CartModule, LibraryModule],
+  imports: [
+    AuthModule,
+    UserModule,
+    PaymentModule,
+    CartModule,
+    LibraryModule,
+    ConfigModule.forRoot(),
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
