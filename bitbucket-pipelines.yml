@@ -17,7 +17,8 @@ pipelines:
     develop:
       - step:
           name: Run Unit Tests
-          caches:
+    # Using a cache the dependecies are downloaded once to atlasian's servers and then locally loaded into the build each time
+          caches: 
             - node
           script:
             - npm install
@@ -32,6 +33,7 @@ pipelines:
           caches:
             - node
           script:
+
             - npm install
             - npm run build
 
