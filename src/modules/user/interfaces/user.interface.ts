@@ -5,5 +5,6 @@ export interface UserInfo {
 }
 
 export interface User extends UserInfo {
+  id: number;
   password: string;
 }

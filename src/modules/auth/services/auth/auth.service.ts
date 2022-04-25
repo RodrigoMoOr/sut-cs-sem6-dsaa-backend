@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UserService } from '../../../user/services/user/user.service';
-import { Credentials } from '../../interfaces/auth.interface';
+import { Credentials } from '../../interfaces/signin.interface';
 import { UserInfo } from '../../../user/interfaces/user.interface';
 
 @Injectable()
