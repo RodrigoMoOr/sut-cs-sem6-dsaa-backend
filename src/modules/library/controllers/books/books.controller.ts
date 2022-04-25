@@ -1,6 +1,9 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Books')
 @Controller('books')
-export class BooksController {}
+export class BooksController {
+  @Get('book/:id')
+  async getBookById() {}
+}
