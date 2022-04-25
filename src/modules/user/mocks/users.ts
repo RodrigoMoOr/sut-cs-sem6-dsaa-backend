@@ -7,4 +7,16 @@ export const users: User[] = [
     email: 'rmorales@email.com',
     password: '123456',
   },
+  {
+    name: 'Monika',
+    surname: 'Dunno',
+    email: 'monika@email.com',
+    password: '123456',
+  },
+  {
+    name: 'Mateo',
+    surname: 'Infomercial',
+    email: 'minfomercial@email.com',
+    password: '123456',
+  },
 ];
