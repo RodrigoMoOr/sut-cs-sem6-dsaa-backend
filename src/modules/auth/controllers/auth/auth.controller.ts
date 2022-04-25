@@ -1,5 +1,4 @@
-import { Controller, Post, Request, UseGuards } from '@nestjs/common';
-import { UserInfo } from '../../../user/interfaces/user.interface';
+import { Controller, Post, UseGuards, Request, Logger } from '@nestjs/common';
 import { LocalAuthGuard } from '../../guards/local-auth.guard';
 import { AuthService } from '../../services/auth/auth.service';
 import { SignInResponse } from '../../interfaces/signin.interface';
@@ -8,12 +7,9 @@ import { SignInResponse } from '../../interfaces/signin.interface';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('signIn')
   @UseGuards(LocalAuthGuard)
-  async signIn(user: UserInfo): Promise<SignInResponse> {
-    return this.authService.signIn(user);
+  @Post('sign-in')
+  async signIn(@Request() req): Promise<SignInResponse> {
+    return this.authService.signIn(req.user);
   }
-
-  // @Post('signUp')
-  // async signUp() {}
 }

@@ -6,6 +6,7 @@ export const users: User[] = [
     name: 'Rodrigo',
     surname: 'Morales',
     email: 'rmorales@email.com',
+    username: 'rmorales@email.com',
     password: '123456',
   },
   {
@@ -13,6 +14,7 @@ export const users: User[] = [
     name: 'Monika',
     surname: 'Dunno',
     email: 'monika@email.com',
+    username: 'monika@email.com',
     password: '123456',
   },
   {
@@ -20,6 +22,7 @@ export const users: User[] = [
     name: 'Mateo',
     surname: 'Infomercial',
     email: 'minfomercial@email.com',
+    username: 'minfomercial@email.com',
     password: '123456',
   },
 ];
