@@ -5,14 +5,14 @@ import { User } from '../../../user/interfaces/user.interface';
 
 @Injectable()
 export class AuthService {
-  constructor(private userService: UserService) {
-  }
+  constructor(private userService: UserService) {}
 
-  async validateUser(credentials: Credentials): Promise<User | undefined> {
+  async validateUser(credentials: Credentials): Promise<Partial<User> | undefined> {
     const user = await this.userService.findOne(credentials.email);
 
     if (user && user.password == credentials.password) {
-      return user;
+      const { password, ...rest } = user;
+      return rest;
     }
 
     return null;
