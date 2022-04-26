@@ -8,7 +8,7 @@ import { Book } from '../../entities/book.entity';
 export class BooksController {
   constructor(private readonly bookService: BookService) {}
 
-  @Get('book/:id')
+  @Get(':id')
   async getBookById(@Param('id') id: number): Promise<Book> {
     return this.bookService.findOne(id);
   }
