@@ -4,7 +4,7 @@ import { Genre } from '../../entities/genre.entity';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Genres')
-@Controller('Genre')
+@Controller('genres')
 export class GenreController {
   constructor(private readonly genreService: GenreService) {}
 

@@ -5,8 +5,7 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class GenreService {
-  constructor(@InjectRepository(Genre) private readonly genreRepository: Repository<Genre>) {
-  }
+  constructor(@InjectRepository(Genre) private readonly genreRepository: Repository<Genre>) {}
 
   findOne(id: number): Promise<Genre> {
     return this.genreRepository.findOne(id);
