@@ -12,4 +12,9 @@ export class BooksController {
   async getBookById(@Param('id') id: number): Promise<Book> {
     return this.bookService.findOne(id);
   }
+
+  @Get()
+  async getAllBooks(): Promise<Book[]> {
+    return this.bookService.findAll();
+  }
 }

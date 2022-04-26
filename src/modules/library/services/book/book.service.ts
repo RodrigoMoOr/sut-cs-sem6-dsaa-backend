@@ -10,4 +10,8 @@ export class BookService {
   findOne(id: number): Promise<Book> {
     return this.bookRepository.findOne(id);
   }
+
+  findAll(): Promise<Book[]> {
+    return this.bookRepository.find();
+  }
 }
