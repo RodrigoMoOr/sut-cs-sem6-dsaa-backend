@@ -1,7 +1,9 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { GenreService } from '../../services/genre/genre.service';
 import { Genre } from '../../entities/genre.entity';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Genres')
 @Controller('Genre')
 export class GenreController {
   constructor(private readonly genreService: GenreService) {}
