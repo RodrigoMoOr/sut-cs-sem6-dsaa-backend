@@ -56,6 +56,7 @@ pipelines:
           script:
             - npm install
             - npm run build
+          # Artifact Added
           artifacts:
             - dist/**
       - step:
