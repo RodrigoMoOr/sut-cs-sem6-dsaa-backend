@@ -20,8 +20,8 @@ pipelines:
     develop:
       - step:
           name: Run Unit Tests
-    # Using a cache the dependecies are downloaded once to atlasian's servers and then locally loaded into the build each time
-          caches: 
+          # Using a cache the dependecies are downloaded once to atlasian's servers and then locally loaded into the build each time
+          caches:
             - node
           script:
             - npm install
@@ -56,10 +56,15 @@ pipelines:
           script:
             - npm install
             - npm run build
+          # Artifact Added
+          artifacts:
+            - dist/**
       - step:
           name: Create App Artifact for Deployment
           script:
             - tar czfv application.tgz dist/
+          artifacts:
+            - application.tgz
       - step:
           name: Deploy to Heroku
           deployment: production
