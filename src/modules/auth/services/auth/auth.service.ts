@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../../../user/services/user/user.service';
-import { Credentials, SignInResponse } from '../../interfaces/signin.interface';
+import {Credentials, GoogleSignInResponse, SignInResponse} from '../../interfaces/signin.interface';
 import { UserInfo } from '../../../user/interfaces/user.interface';
 
 @Injectable()
@@ -24,9 +24,9 @@ export class AuthService {
     return { accessToken: this.jwtService.sign(payload) };
   }
 
-  googleSignIn(req) {
+  googleSignIn(req): GoogleSignInResponse | undefined {
     if (!req.user) {
-      return 'No user from google';
+      return null;
     }
 
     return {
