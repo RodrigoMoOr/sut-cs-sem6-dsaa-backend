@@ -23,4 +23,15 @@ export class AuthService {
     const payload = { username: user.username, sub: user.id };
     return { accessToken: this.jwtService.sign(payload) };
   }
+
+  googleSignIn(req) {
+    if (!req.user) {
+      return 'No user from google';
+    }
+
+    return {
+      message: 'User information from google',
+      user: req.user,
+    };
+  }
 }
