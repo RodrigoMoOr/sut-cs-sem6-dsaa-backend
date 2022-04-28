@@ -1,8 +1,9 @@
-import { Controller, Post, UseGuards, Request, Logger } from '@nestjs/common';
+import { Controller, Get, Post, Req, Request, UseGuards } from '@nestjs/common';
 import { LocalAuthGuard } from '../../guards/local-auth.guard';
 import { AuthService } from '../../services/auth/auth.service';
-import { SignInResponse } from '../../interfaces/signin.interface';
+import { GoogleSignInResponse, SignInResponse } from '../../interfaces/signin.interface';
 import { ApiTags } from '@nestjs/swagger';
+import { GoogleAuthGuard } from '../../guards/google-auth.guard';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -13,5 +14,15 @@ export class AuthController {
   @Post('sign-in')
   async signIn(@Request() req): Promise<SignInResponse> {
     return this.authService.signIn(req.user);
+  }
+
+  @Get('google')
+  @UseGuards(GoogleAuthGuard)
+  async googleAuth(@Req() req) {}
+
+  @Get('google/redirect')
+  @UseGuards(GoogleAuthGuard)
+  googleAuthRedirect(@Req() req): GoogleSignInResponse | undefined {
+    return this.authService.googleSignIn(req);
   }
 }
