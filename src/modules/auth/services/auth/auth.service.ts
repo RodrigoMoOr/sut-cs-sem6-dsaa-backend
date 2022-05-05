@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../../../user/services/user/user.service';
-import { Credentials, SignInResponse } from '../../interfaces/signin.interface';
+import {Credentials, GoogleSignInResponse, SignInResponse} from '../../interfaces/signin.interface';
 import { UserInfo } from '../../../user/interfaces/user.interface';
 
 @Injectable()
@@ -22,5 +22,16 @@ export class AuthService {
   async signIn(user: UserInfo): Promise<SignInResponse> {
     const payload = { username: user.username, sub: user.id };
     return { accessToken: this.jwtService.sign(payload) };
+  }
+
+  googleSignIn(req): GoogleSignInResponse | undefined {
+    if (!req.user) {
+      return null;
+    }
+
+    return {
+      message: 'User information from google',
+      user: req.user,
+    };
   }
 }
