@@ -7,10 +7,12 @@ import { Book } from './entities/book.entity';
 import { BookService } from './services/book/book.service';
 import { GenreService } from './services/genre/genre.service';
 import { Genre } from './entities/genre.entity';
+import { AuthorService } from './services/author/author.service';
+import { Author } from './entities/author.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Book, Genre])],
+  imports: [TypeOrmModule.forFeature([Book, Genre, Author])],
   controllers: [BooksController, AuthorsController, GenreController],
-  providers: [BookService, GenreService],
+  providers: [BookService, GenreService, AuthorService],
 })
 export class LibraryModule {}

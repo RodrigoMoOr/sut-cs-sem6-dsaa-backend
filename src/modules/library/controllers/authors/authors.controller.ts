@@ -1,6 +1,20 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { AuthorService } from '../../services/author/author.service';
+import { Author } from '../../entities/author.entity';
 
 @ApiTags('Authors')
 @Controller('authors')
-export class AuthorsController {}
+export class AuthorsController {
+  constructor(private readonly authorService: AuthorService) {}
+
+  @Get(':id')
+  async getAuthorById(@Param('id') id: number): Promise<Author> {
+    return this.authorService.findOne(id);
+  }
+
+  @Get()
+  async getAllAuthors(): Promise<Author[]> {
+    return this.authorService.findAll();
+  }
+}
