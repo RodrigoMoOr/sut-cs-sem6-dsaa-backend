@@ -7,6 +7,13 @@ import { CartModule } from './modules/cart/cart.module';
 import { PaymentModule } from './modules/payment/payment.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), DatabaseModule, AuthModule, LibraryModule, CartModule, PaymentModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    DatabaseModule,
+    AuthModule,
+    LibraryModule,
+    CartModule,
+    PaymentModule,
+  ],
 })
 export class AppModule {}

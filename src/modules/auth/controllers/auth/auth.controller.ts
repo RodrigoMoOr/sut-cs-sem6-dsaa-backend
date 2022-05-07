@@ -1,10 +1,10 @@
-import { Controller, Get, Post, Req, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Request, UseGuards } from '@nestjs/common';
 import { LocalAuthGuard } from '../../guards/local-auth.guard';
 import { AuthService } from '../../services/auth/auth.service';
 import { GoogleSignInResponse, SignInResponse } from '../../interfaces/sign-in.interface';
 import { ApiTags } from '@nestjs/swagger';
 import { GoogleAuthGuard } from '../../guards/google-auth.guard';
-import { SignUpResponse } from '../../interfaces/sign-up.interface';
+import { SignUp, SignUpResponse } from '../../interfaces/sign-up.interface';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -18,12 +18,13 @@ export class AuthController {
   }
 
   @Post('sign-up')
-  async signUp(): Promise<SignUpResponse> {
-    this.authService;
+  async signUp(@Body() user: SignUp): Promise<SignUpResponse> {
+    return this.authService.signUp(user);
   }
 
   @Get('google')
   @UseGuards(GoogleAuthGuard)
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   async googleAuth(@Req() req) {}
 
   @Get('google/redirect')

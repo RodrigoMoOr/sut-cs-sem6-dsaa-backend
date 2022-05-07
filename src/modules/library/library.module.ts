@@ -14,5 +14,6 @@ import { Author } from './entities/author.entity';
   imports: [TypeOrmModule.forFeature([Book, Genre, Author])],
   controllers: [BooksController, AuthorsController, GenreController],
   providers: [BookService, GenreService, AuthorService],
+  exports: [TypeOrmModule],
 })
 export class LibraryModule {}

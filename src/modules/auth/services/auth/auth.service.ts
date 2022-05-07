@@ -1,27 +1,28 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../../../user/services/user/user.service';
 import { Credentials, GoogleSignInResponse, SignInResponse } from '../../interfaces/sign-in.interface';
-import { UserInfo } from '../../../user/interfaces/user.interface';
+import { SignUp, SignUpResponse } from '../../interfaces/sign-up.interface';
+import { User } from '../../../user/entities/user.entity';
 
 @Injectable()
 export class AuthService {
   constructor(private userService: UserService, private jwtService: JwtService) {}
 
-  async validateUser(credentials: Credentials): Promise<UserInfo | undefined> {
-    const user = await this.userService.findOne(credentials.username);
-
-    if (user && user.password === credentials.password) {
-      const { password, ...rest } = user;
-      return rest;
-    }
-
-    return null;
+  async validateUser(credentials: Credentials): Promise<User | undefined> {
+    return this.userService.findByUsername(credentials.username);
   }
 
-  async signIn(user: UserInfo): Promise<SignInResponse> {
+  async signIn(user: User): Promise<SignInResponse> {
     const payload = { username: user.username, sub: user.id };
     return { accessToken: this.jwtService.sign(payload) };
+  }
+
+  async signUp(user: SignUp): Promise<SignUpResponse> {
+    Logger.log('SIGN UP INFO: ', user);
+    const createdUser = await this.userService.create(user);
+    Logger.log('SIGN UP RES: ', createdUser);
+    return { id: createdUser.id, username: createdUser.username };
   }
 
   googleSignIn(req): GoogleSignInResponse | undefined {
