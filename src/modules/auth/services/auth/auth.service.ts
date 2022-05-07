@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../../../user/services/user/user.service';
 import { Credentials, GoogleSignInResponse, SignInResponse } from '../../interfaces/sign-in.interface';
@@ -19,9 +19,7 @@ export class AuthService {
   }
 
   async signUp(user: SignUp): Promise<SignUpResponse> {
-    Logger.log('SIGN UP INFO: ', user);
     const createdUser = await this.userService.create(user);
-    Logger.log('SIGN UP RES: ', createdUser);
     return { id: createdUser.id, username: createdUser.username };
   }
 

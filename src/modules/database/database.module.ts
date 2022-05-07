@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Connection } from 'typeorm';
 
 @Module({
   imports: [
@@ -16,12 +15,9 @@ import { Connection } from 'typeorm';
         password: configService.get('POSTGRES_PASSWORD'),
         database: configService.get('POSTGRES_DATABASE'),
         entities: [__dirname + '/../**/*.entity.js'],
-        autoLoadEntities: true,
         synchronize: true,
       }),
     }),
   ],
 })
-export class DatabaseModule {
-  constructor(private connection: Connection) {}
-}
+export class DatabaseModule {}

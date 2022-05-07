@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { CreateUser } from '../../interfaces/user.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -9,7 +9,12 @@ export class UserService {
   constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
 
   async create(user: CreateUser): Promise<User> {
-    return this.userRepository.create(user);
+    const createdUser = await this.userRepository.create(user);
+    Logger.log('SIGN UP RES: ', createdUser.id, createdUser.email);
+
+    if (!createdUser) throw new HttpException('Error creating user', HttpStatus.SERVICE_UNAVAILABLE);
+
+    return createdUser;
   }
 
   async findByUsername(username: string): Promise<User> {
