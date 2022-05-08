@@ -9,7 +9,7 @@ import { JWTStrategy } from './strategies/jwt.strategy';
 import { GoogleAuthStrategy } from './strategies/google-auth.strategy';
 
 @Module({
-  imports: [UserModule, PassportModule, JwtModule.register({ secret: 'SECRET', signOptions: { expiresIn: '60s' } })],
+  imports: [UserModule, PassportModule, JwtModule.register({ secret: 'SECRET', signOptions: { expiresIn: '24h' } })],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JWTStrategy, GoogleAuthStrategy],
   exports: [JWTStrategy],
