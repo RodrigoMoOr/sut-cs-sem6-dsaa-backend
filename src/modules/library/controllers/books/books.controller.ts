@@ -16,6 +16,9 @@ export class BooksController {
 
   @Get()
   async getBooks(@Query() filtersDTO: GetFilteredBooksDTO): Promise<Book[]> {
+    if (Object.keys(filtersDTO).length) {
+      return this.bookService.findByFilter(filtersDTO);
+    }
     return this.bookService.findAll();
   }
 }
