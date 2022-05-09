@@ -1,6 +1,13 @@
-import { Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Book } from '../../library/entities/book.entity';
-import { JoinTable } from 'typeorm/browser';
 
 @Entity('cart')
 export class Cart {
@@ -10,6 +17,15 @@ export class Cart {
   @ManyToMany(() => Book)
   @JoinTable()
   books: Book[];
+  @Column()
+  totalItems: number;
 
-  // TODO: one to one relationship to user entity (pending merge from another PR)
+  @Column()
+  total: number;
+
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
 }
