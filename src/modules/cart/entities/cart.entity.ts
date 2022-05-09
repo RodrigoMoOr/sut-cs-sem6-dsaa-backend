@@ -17,7 +17,6 @@ export class Cart {
   @ManyToMany(() => Book)
   @JoinTable()
   books: Book[];
-
   @Column()
   totalItems: number;
 

@@ -13,19 +13,19 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('sign-in')
-  async signIn(@Request() req): Promise<SignInResponse> {
+  signIn(@Request() req): Promise<SignInResponse> {
     return this.authService.signIn(req.user);
   }
 
   @Post('sign-up')
-  async signUp(@Body() user: SignUp): Promise<SignUpResponse> {
+  signUp(@Body() user: SignUp): Promise<SignUpResponse> {
     return this.authService.signUp(user);
   }
 
   @Get('google')
   @UseGuards(GoogleAuthGuard)
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  async googleAuth(@Req() req) {}
+  googleAuth(@Req() req) {}
 
   @Get('google/redirect')
   @UseGuards(GoogleAuthGuard)

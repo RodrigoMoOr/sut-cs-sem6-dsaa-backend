@@ -10,12 +10,12 @@ export class BooksController {
   constructor(private readonly bookService: BookService) {}
 
   @Get(':id')
-  async getBookById(@Param('id') id: number): Promise<Book> {
+  getBookById(@Param('id') id: number): Promise<Book> {
     return this.bookService.findOne(id);
   }
 
   @Get()
-  async getBooks(@Query() filtersDTO: GetFilteredBooksDTO): Promise<Book[]> {
+  getBooks(@Query() filtersDTO: GetFilteredBooksDTO): Promise<Book[]> {
     if (Object.keys(filtersDTO).length) {
       return this.bookService.findByFilter(filtersDTO);
     }

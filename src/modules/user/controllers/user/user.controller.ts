@@ -9,7 +9,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('info/:id')
-  async getUserInfo(@Param('id') id: number): Promise<CreatedUser> {
+  getUserInfo(@Param('id') id: number): Promise<CreatedUser> {
     return this.userService.findById(id);
   }
 }
