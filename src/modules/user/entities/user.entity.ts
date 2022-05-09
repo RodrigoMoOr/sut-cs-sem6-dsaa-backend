@@ -10,6 +10,7 @@ import {
 import * as crypto from 'crypto';
 import { Cart } from '../../cart/entities/cart.entity';
 import { JoinColumn } from 'typeorm/browser';
+import { PaymentHistory } from '../../payment/entities/payment-history.entity';
 
 @Entity('user')
 export class User {
@@ -38,6 +39,12 @@ export class User {
 
   @OneToOne(() => Cart)
   @JoinColumn()
+  cart: Cart;
+
+  @OneToOne(() => PaymentHistory)
+  @JoinColumn()
+  paymentHistory: PaymentHistory;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
