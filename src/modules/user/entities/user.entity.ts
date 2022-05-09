@@ -1,5 +1,16 @@
-import { BeforeInsert, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  BeforeInsert,
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import * as crypto from 'crypto';
+import { Cart } from '../../cart/entities/cart.entity';
+import { PaymentHistory } from '../../payment/entities/payment-history.entity';
 
 @Entity('user')
 export class User {
@@ -25,6 +36,14 @@ export class User {
 
   @Column()
   password: string;
+
+  @OneToOne(() => Cart)
+  @JoinColumn()
+  cart: Cart;
+
+  @OneToOne(() => PaymentHistory)
+  @JoinColumn()
+  paymentHistory: PaymentHistory;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
