@@ -1,6 +1,13 @@
-import { Column, CreateDateColumn, Entity, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Book } from '../../library/entities/book.entity';
-import { JoinTable } from 'typeorm/browser';
 
 @Entity('cart')
 export class Cart {

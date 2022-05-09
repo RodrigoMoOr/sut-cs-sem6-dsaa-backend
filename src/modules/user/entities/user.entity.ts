@@ -3,13 +3,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import * as crypto from 'crypto';
 import { Cart } from '../../cart/entities/cart.entity';
-import { JoinColumn } from 'typeorm/browser';
 import { PaymentHistory } from '../../payment/entities/payment-history.entity';
 
 @Entity('user')
