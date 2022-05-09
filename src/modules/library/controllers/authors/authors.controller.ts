@@ -9,12 +9,12 @@ export class AuthorsController {
   constructor(private readonly authorService: AuthorService) {}
 
   @Get(':id')
-  async getAuthorById(@Param('id') id: number): Promise<Author> {
+  getAuthorById(@Param('id') id: number): Promise<Author> {
     return this.authorService.findOne(id);
   }
 
   @Get()
-  async getAllAuthors(): Promise<Author[]> {
+  getAllAuthors(): Promise<Author[]> {
     return this.authorService.findAll();
   }
 }
