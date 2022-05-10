@@ -58,5 +58,5 @@ pipelines:
             - git add -A
             - git config --global user.email "andresmorales.ro@gmail.com"
             - git config --global user.name "Rodrigo Morales"
-            - git commit -m "production build"
+            - git commit -m "production build" --no-verify
             - git push -f https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master:master
