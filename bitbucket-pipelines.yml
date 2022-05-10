@@ -9,9 +9,9 @@ pipelines:
           name: Run Unit Tests
           caches:
             - node
-          #script list of commands that are executed in sequence:
-          #Installing all dependencies
-          #Running the automated test from project
+          # script list of commands that are executed in sequence:
+          # Installing all dependencies
+          # Running the automated test from project
           script:
             - npm install
             - npm run test
@@ -36,7 +36,6 @@ pipelines:
           caches:
             - node
           script:
-
             - npm install
             - npm run build
 
@@ -56,23 +55,8 @@ pipelines:
           script:
             - npm install
             - npm run build
-          # Artifact Added
-          artifacts:
-            - dist/**
-      - step:
-          name: Create App Artifact for Deployment
-          script:
-            - tar czfv application.tgz dist/
-          artifacts:
-            - application.tgz
-      - step:
-          name: Deploy to Heroku
-          deployment: production
-          caches:
-            - node
-          script:
-            - pipe: atlassian/heroku-deploy:0.1.1
-              variables:
-                HEROKU_API_KEY: $HEROKU_API_KEY
-                HEROKU_APP_NAME: $HEROKU_APP_NAME
-                ZIP_FILE: 'application.tgz'
+            - git add -A
+            - git config --global user.email "andresmorales.ro@gmail.com"
+            - git config --global user.name "Rodrigo Morales"
+            - git commit -m "production build"
+            - git push -f https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master:master
