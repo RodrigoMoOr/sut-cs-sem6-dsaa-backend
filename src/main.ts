@@ -4,6 +4,17 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const whitelist = ['localhost:3000', '127.0.0.1', 'https://sut-sp-frontend.herokuapp.com/'];
+  app.enableCors({
+    origin: (origin, callback) => {
+      if (!origin || whitelist.indexOf(origin) === -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Origin not allowed by CORS'));
+      }
+    },
+  });
+
   app.setGlobalPrefix('api');
 
   const config = new DocumentBuilder()
