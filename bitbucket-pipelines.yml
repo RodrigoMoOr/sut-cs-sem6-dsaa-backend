@@ -41,13 +41,13 @@ pipelines:
 
     # CD Pipeline to deploy app to Heroku
     master:
-      - step:
-          name: Run Unit Tests
-          caches:
-            - node
-          script:
-            - npm install
-            - npm run test
+      #      - step:
+      #          name: Run Unit Tests
+      #          caches:
+      #            - node
+      #          script:
+      #            - npm install
+      #            - npm run test
       - step:
           name: Compile Application
           caches:
