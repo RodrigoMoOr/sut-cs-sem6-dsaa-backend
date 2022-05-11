@@ -1,6 +1,6 @@
 import { Controller, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateCartDto } from '../../../user/dto/create-cart.dto';
+import { CreateCartDto } from '../../dto/create-cart.dto';
 import { Cart } from '../../entities/cart.entity';
 import { CartService } from '../../services/cart/cart.service';
 
