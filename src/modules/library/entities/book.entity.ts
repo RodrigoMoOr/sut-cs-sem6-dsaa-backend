@@ -7,16 +7,16 @@ export class Book {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: true })
   isbn10: string;
 
-  @Column()
+  @Column({ nullable: true })
   isbn13: string;
 
   @Column()
   title: string;
 
-  @Column()
+  @Column({ nullable: true })
   subtitle: string;
 
   @Column()
