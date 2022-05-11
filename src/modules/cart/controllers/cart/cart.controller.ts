@@ -1,8 +1,9 @@
-import { Controller, Post } from '@nestjs/common';
+import { Controller, Post, Put } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateCartDto } from '../../../user/dto/create-cart.dto';
+import { CreateCartDto } from '../../dto/create-cart.dto';
 import { Cart } from '../../entities/cart.entity';
 import { CartService } from '../../services/cart/cart.service';
+import { UpdateCartDto } from '../../dto/update-cart.dto';
 
 @ApiTags('Cart')
 @Controller('cart')
@@ -12,5 +13,10 @@ export class CartController {
   @Post()
   createCart(cart: CreateCartDto): Promise<Cart> {
     return this.cartService.create(cart);
+  }
+
+  @Put(':id')
+  updateCart(cart: UpdateCartDto): Promise<Cart> {
+    return this.cartService.update(cart);
   }
 }

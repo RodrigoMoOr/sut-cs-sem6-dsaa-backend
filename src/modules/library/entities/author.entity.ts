@@ -16,6 +16,9 @@ export class Author {
   @Column()
   bio: string;
 
+  @Column({ name: 'image_url' })
+  imageUrl: string;
+
   @OneToMany(() => Book, book => book.author)
   books: Book[];
 
