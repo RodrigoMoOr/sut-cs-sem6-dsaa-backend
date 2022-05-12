@@ -30,8 +30,7 @@ export class UserService {
   //   return await this.userRepository.update();
   // }
 
-  // TODO: implement this method
-  // async deleteUser(id: number): Promise<any> {
-  //   return await this.userRepository.delete();
-  // }
+  async deleteUser(id: number): Promise<any> {
+    return await this.userRepository.delete(id);
+  }
 }
