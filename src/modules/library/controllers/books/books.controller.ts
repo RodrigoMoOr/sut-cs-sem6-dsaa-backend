@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Put, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { BookService } from '../../services/book/book.service';
 import { Book } from '../../entities/book.entity';
@@ -20,5 +20,10 @@ export class BooksController {
       return this.bookService.findByFilter(filtersDTO);
     }
     return this.bookService.findAll();
+  }
+
+  @Put(':id')
+  updateBook(@Body() book): Promise<Book> {
+    return this.bookService.updateOne(book);
   }
 }
