@@ -24,4 +24,9 @@ export class UserController {
   updateUser(user: UpdateUserDto): Promise<User> {
     return this.userService.updateUser(user);
   }
+
+  @Get(':id')
+  getUser(@Param('id') id: number): Promise<User> {
+    return this.userService.findById(id);
+  }
 }
