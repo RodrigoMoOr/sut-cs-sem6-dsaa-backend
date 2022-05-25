@@ -12,8 +12,8 @@ export class BookService {
     return this.bookRepository.save(book);
   }
 
-  findOne(id: number): Promise<Book> {
-    return this.bookRepository.findOne(id);
+  findOne(id: number): Promise<Book | null> {
+    return this.bookRepository.findOneOrFail(id);
   }
 
   findAll(): Promise<Book[]> {

@@ -15,7 +15,11 @@ export class BooksController {
   }
 
   @Get()
-  getBooks(@Query() filtersDTO: GetFilteredBooksDTO): Promise<Book[]> {
+  getBooks(
+    @Query('page') page = 1,
+    @Query('items') items = 10,
+    @Query() filtersDTO: GetFilteredBooksDTO,
+  ): Promise<Book[]> {
     if (Object.keys(filtersDTO).length) {
       return this.bookService.findByFilter(filtersDTO);
     }
