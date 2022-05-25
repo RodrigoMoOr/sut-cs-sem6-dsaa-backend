@@ -3,6 +3,8 @@ import { ApiTags } from '@nestjs/swagger';
 import { BookService } from '../../services/book/book.service';
 import { Book } from '../../entities/book.entity';
 import { GetFilteredBooksDTO } from '../../dto/get-filtered-books.dto';
+import { Observable } from 'rxjs';
+import { Pagination } from 'nestjs-typeorm-paginate';
 
 @ApiTags('Books')
 @Controller('books')
@@ -15,11 +17,15 @@ export class BooksController {
   }
 
   @Get()
-  getBooks(@Query() filtersDTO: GetFilteredBooksDTO): Promise<Book[]> {
+  getBooks(
+    @Query('page') page = 1,
+    @Query('limit') limit = 10,
+    @Query() filtersDTO: GetFilteredBooksDTO,
+  ): Observable<Pagination<Book>> | Promise<Book[]> {
     if (Object.keys(filtersDTO).length) {
       return this.bookService.findByFilter(filtersDTO);
     }
-    return this.bookService.findAll();
+    return this.bookService.findAllPaginate({ page, limit, route: 'localhost:3000/authors' });
   }
 
   @Put(':id')
