@@ -38,6 +38,66 @@ export class BookService {
     return books;
   }
 
+  async sortBooksByTitle(filters: GetFilteredBooksDTO): Promise<Book[]> {
+    const { title } = filters;
+
+    let books = await this.findAll();
+
+    if (title) {
+      books = books.filter(book => book.title === title);
+    }
+
+    return books.sort((a, b) => (a.title > b.title ? 1 : -1));
+  }
+
+  async sortBooksByAuthor(filters: GetFilteredBooksDTO): Promise<Book[]> {
+    const { author } = filters;
+
+    let books = await this.findAll();
+
+    if (author) {
+      books = books.filter(book => book.author === author);
+    }
+
+    return books.sort((a, b) => (a.author > b.author ? 1 : -1));
+  }
+
+  async sortBooksByPrice(filters: GetFilteredBooksDTO): Promise<Book[]> {
+    const { price } = filters;
+
+    let books = await this.findAll();
+
+    if (price) {
+      books = books.filter(book => book.price === price);
+    }
+
+    return books.sort((a, b) => (a.price > b.price ? 1 : -1));
+  }
+
+  async sortBooksByRating(filters: GetFilteredBooksDTO): Promise<Book[]> {
+    const { rating } = filters;
+
+    let books = await this.findAll();
+
+    if (rating) {
+      books = books.filter(book => book.rating === rating);
+    }
+
+    return books.sort((a, b) => (a.rating > b.rating ? 1 : -1));
+  }
+
+  async sortBooksByPublisher(filters: GetFilteredBooksDTO): Promise<Book[]> {
+    const { publisher } = filters;
+
+    let books = await this.findAll();
+
+    if (publisher) {
+      books = books.filter(book => book.publisher === publisher);
+    }
+
+    return books.sort((a, b) => (a.publisher > b.publisher ? 1 : -1));
+  }
+
   async updateOne(book): Promise<Book> {
     const foundBook = await this.findOne(book.id);
 

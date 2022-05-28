@@ -28,6 +28,30 @@ export class BooksController {
     return this.bookService.findAllPaginate({ page, limit, route: 'localhost:3000/authors' });
   }
 
+  @Get('/sort')
+  sortBooksByTitle(@Query() filtersDTO: GetFilteredBooksDTO): Promise<Book[]> {
+    return this.bookService.sortBooksByTitle(filtersDTO);
+  }
+
+  @Get('/sort')
+  sortBooksByAuthor(@Query() filtersDTO: GetFilteredBooksDTO): Promise<Book[]> {
+    return this.bookService.sortBooksByAuthor(filtersDTO);
+  }
+
+  @Get('/sort')
+  sortBooksByPrice(@Query() filtersDTO: GetFilteredBooksDTO): Promise<Book[]> {
+    return this.bookService.sortBooksByPrice(filtersDTO);
+  }
+
+  @Get('/sort')
+  sortBooksByRating(@Query() filtersDTO: GetFilteredBooksDTO): Promise<Book[]> {
+    return this.bookService.sortBooksByRating(filtersDTO);
+  }
+
+  @Get('/sort')
+  sortBooksByPublisher(@Query() filtersDTO: GetFilteredBooksDTO): Promise<Book[]> {
+    return this.bookService.sortBooksByPublisher(filtersDTO);
+  }
   @Put(':id')
   updateBook(@Body() book): Promise<Book> {
     return this.bookService.updateOne(book);
