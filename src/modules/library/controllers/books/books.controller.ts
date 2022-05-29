@@ -25,7 +25,7 @@ export class BooksController {
     if (Object.keys(filtersDTO).length) {
       return this.bookService.findByFilter(filtersDTO);
     }
-    return this.bookService.findAllPaginate({ page, limit, route: 'localhost:3000/authors' });
+    return this.bookService.findAllPaginate({ page, limit, route: 'localhost:3000/books' });
   }
 
   @Get('/sort')
