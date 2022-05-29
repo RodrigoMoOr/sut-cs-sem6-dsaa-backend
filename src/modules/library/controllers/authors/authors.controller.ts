@@ -1,7 +1,9 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthorService } from '../../services/author/author.service';
 import { Author } from '../../entities/author.entity';
+import { Observable } from 'rxjs';
+import { Pagination } from 'nestjs-typeorm-paginate';
 
 @ApiTags('Authors')
 @Controller('authors')
@@ -14,7 +16,7 @@ export class AuthorsController {
   }
 
   @Get()
-  getAllAuthors(): Promise<Author[]> {
-    return this.authorService.findAll();
+  getAllAuthors(@Query('page') page = 1, @Query('limit') limit = 10): Observable<Pagination<Author>> {
+    return this.authorService.findAllPaginated({ page, limit, route: 'localhost:3000/authors' });
   }
 }
