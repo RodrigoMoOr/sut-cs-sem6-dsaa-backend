@@ -3,19 +3,22 @@ import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../../../user/services/user/user.service';
 import { CreateUserDTO } from '../../../user/dto/create-user.dto';
 import { UserDTO } from '../../../user/dto/user.dto';
+import { SignInDTO } from '../../dto/sign-in.dto';
+import { SignInResponse } from '../../interfaces/sign-in.interface';
+import { User } from '../../../user/entities/user.entity';
 
 @Injectable()
 export class AuthService {
   constructor(private userService: UserService, private jwtService: JwtService) {}
 
-  // async validateUser(credentials: Credentials): Promise<User | undefined> {
-  //   return this.userService.findByUsername(credentials.username);
-  // }
+  async validateUser(credentials: SignInDTO): Promise<UserDTO | undefined> {
+    return this.userService.findByUsername(credentials);
+  }
 
-  // async signIn(user: User): Promise<SignInResponse> {
-  //   const payload = { username: user.username, sub: user.id };
-  //   return { accessToken: this.jwtService.sign(payload) };
-  // }
+  async signIn(user: User): Promise<SignInResponse> {
+    const payload = { username: user.username, sub: user.id };
+    return { accessToken: this.jwtService.sign(payload) };
+  }
 
   async signUp(user: CreateUserDTO): Promise<UserDTO> {
     return await this.userService.create(user);
