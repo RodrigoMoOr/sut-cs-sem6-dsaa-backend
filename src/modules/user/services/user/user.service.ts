@@ -1,25 +1,36 @@
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
-import { CreateUser } from '../../interfaces/user.interface';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../../entities/user.entity';
 import { UpdateUserDto } from '../../dto/update-user.dto';
+import { UserDTO } from '../../dto/user.dto';
+import { SignInDTO } from '../../dto/sign-in.dto';
+import { toUserDTO } from '../../../shared/helpers/mapper';
+import { CreateUserDTO } from '../../dto/create-user.dto';
 
 @Injectable()
 export class UserService {
   constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
 
-  async create(user: CreateUser): Promise<User> {
+  async create(user: CreateUserDTO): Promise<UserDTO> {
+    const existingUser = await this.userRepository.findOne({ where: { username: user.username } });
+    if (existingUser) throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
+
     const createdUser = await this.userRepository.create(user);
-    Logger.log('SIGN UP RES: ', createdUser.id, createdUser.email);
+    await this.userRepository.save(createdUser);
 
-    if (!createdUser) throw new HttpException('Error creating user', HttpStatus.SERVICE_UNAVAILABLE);
-
-    return createdUser;
+    return toUserDTO(createdUser);
   }
 
-  async findByUsername(username: string): Promise<User> {
-    return await this.userRepository.findOne({ where: { username: username } });
+  async findByUsername(signInDTO: SignInDTO): Promise<UserDTO> {
+    const existingUser = await this.userRepository.findOne({ where: { username: signInDTO.username } });
+
+    if (!existingUser) throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
+
+    if (existingUser.password != signInDTO.password)
+      throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+
+    return toUserDTO(existingUser);
   }
 
   async findById(id: number): Promise<User> {
