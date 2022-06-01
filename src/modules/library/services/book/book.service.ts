@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Book } from '../../entities/book.entity';
 import { Repository } from 'typeorm';
 import { GetFilteredBooksDTO } from '../../dto/get-filtered-books.dto';
+import { GetSortedBooksDTO } from '../../dto/get-sorted-books.dto';
 import { from, map, Observable } from 'rxjs';
 import { IPaginationOptions, paginate, Pagination } from 'nestjs-typeorm-paginate';
 
@@ -38,66 +39,68 @@ export class BookService {
     return books;
   }
 
-  async sortBooksByTitle(filters: GetFilteredBooksDTO): Promise<Book[]> {
-    const { title } = filters;
+  async sortBooks(sorting: GetSortedBooksDTO): Promise<Book[]> {
+    const { sortBy, sortOrder } = sorting;
 
-    let books = await this.findAll();
-
-    if (title) {
-      books = books.filter(book => book.title === title);
+    if (sortBy === 'title' && sortOrder === 'desc') {
+      return this.bookRepository.find({
+        order: {
+          title: 'DESC',
+        },
+      });
     }
-
-    return books.sort((a, b) => (a.title > b.title ? 1 : -1));
-  }
-
-  async sortBooksByAuthor(filters: GetFilteredBooksDTO): Promise<Book[]> {
-    const { author } = filters;
-
-    let books = await this.findAll();
-
-    if (author) {
-      books = books.filter(book => book.author === author);
+    if (sortBy === 'title' && sortOrder === 'asc') {
+      {
+        return this.bookRepository.find({
+          order: { title: 'ASC' },
+        });
+      }
     }
-
-    return books.sort((a, b) => (a.author > b.author ? 1 : -1));
-  }
-
-  async sortBooksByPrice(filters: GetFilteredBooksDTO): Promise<Book[]> {
-    const { price } = filters;
-
-    let books = await this.findAll();
-
-    if (price) {
-      books = books.filter(book => book.price === price);
+    if (sortBy === 'price' && sortOrder === 'desc') {
+      return this.bookRepository.find({
+        order: {
+          price: 'DESC',
+        },
+      });
     }
-
-    return books.sort((a, b) => (a.price > b.price ? 1 : -1));
-  }
-
-  async sortBooksByRating(filters: GetFilteredBooksDTO): Promise<Book[]> {
-    const { rating } = filters;
-
-    let books = await this.findAll();
-
-    if (rating) {
-      books = books.filter(book => book.rating === rating);
+    if (sortBy === 'price' && sortOrder === 'asc') {
+      return this.bookRepository.find({
+        order: { price: 'ASC' },
+      });
     }
-
-    return books.sort((a, b) => (a.rating > b.rating ? 1 : -1));
-  }
-
-  async sortBooksByPublisher(filters: GetFilteredBooksDTO): Promise<Book[]> {
-    const { publisher } = filters;
-
-    let books = await this.findAll();
-
-    if (publisher) {
-      books = books.filter(book => book.publisher === publisher);
+    if (sortBy === 'rating' && sortOrder === 'desc') {
+      return this.bookRepository.find({
+        order: {
+          rating: 'DESC',
+        },
+      });
     }
-
-    return books.sort((a, b) => (a.publisher > b.publisher ? 1 : -1));
+    if (sortBy === 'rating' && sortOrder === 'asc') {
+      return this.bookRepository.find({
+        order: { rating: 'ASC' },
+      });
+    }
+    if (sortBy === 'author' && sortOrder === 'desc') {
+      return this.bookRepository.find({
+        order: { author: 'DESC' },
+      });
+    }
+    if (sortBy === 'author' && sortOrder === 'asc') {
+      return this.bookRepository.find({
+        order: { author: 'ASC' },
+      });
+    }
+    if (sortBy === 'publisher' && sortOrder === 'desc') {
+      return this.bookRepository.find({
+        order: { publisher: 'DESC' },
+      });
+    }
+    if (sortBy === 'publisher' && sortOrder === 'asc') {
+      return this.bookRepository.find({
+        order: { publisher: 'ASC' },
+      });
+    }
   }
-
   async updateOne(book): Promise<Book> {
     const foundBook = await this.findOne(book.id);
 
