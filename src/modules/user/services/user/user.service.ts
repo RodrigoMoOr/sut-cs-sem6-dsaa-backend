@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../../entities/user.entity';
@@ -27,7 +27,6 @@ export class UserService {
     const existingUser = await this.userRepository.findOne({ where: { username: signInDTO.username } });
     if (!existingUser) throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
 
-    Logger.log(`Passwords match: ${matchCypheredText(signInDTO.password, existingUser.password)}`);
     if (!matchCypheredText(signInDTO.password, existingUser.password))
       throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
 
