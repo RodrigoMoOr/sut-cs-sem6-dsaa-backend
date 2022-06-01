@@ -1,10 +1,10 @@
-import { Body, Controller, Get, Post, Req, Request, UseGuards } from '@nestjs/common';
-import { LocalAuthGuard } from '../../guards/local-auth.guard';
+import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from '../../services/auth/auth.service';
-import { GoogleSignInResponse, SignInResponse } from '../../interfaces/sign-in.interface';
 import { ApiTags } from '@nestjs/swagger';
-import { GoogleAuthGuard } from '../../guards/google-auth.guard';
-import { SignUp, SignUpResponse } from '../../interfaces/sign-up.interface';
+import { UserDTO } from '../../../user/dto/user.dto';
+import { CreateUserDTO } from '../../../user/dto/create-user.dto';
+import { LocalAuthGuard } from '../../guards/local-auth.guard';
+import { SignInResponse } from '../../interfaces/sign-in.interface';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -13,23 +13,23 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('sign-in')
-  signIn(@Request() req): Promise<SignInResponse> {
+  signIn(@Req() req): Promise<SignInResponse> {
     return this.authService.signIn(req.user);
   }
 
   @Post('sign-up')
-  signUp(@Body() user: SignUp): Promise<SignUpResponse> {
+  signUp(@Body() user: CreateUserDTO): Promise<UserDTO> {
     return this.authService.signUp(user);
   }
 
-  @Get('google')
-  @UseGuards(GoogleAuthGuard)
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  googleAuth(@Req() req) {}
-
-  @Get('google/redirect')
-  @UseGuards(GoogleAuthGuard)
-  googleAuthRedirect(@Req() req): GoogleSignInResponse | undefined {
-    return this.authService.googleSignIn(req);
-  }
+  // @Get('google')
+  // @UseGuards(GoogleAuthGuard)
+  // // eslint-disable-next-line @typescript-eslint/no-empty-function
+  // googleAuth(@Req() req) {}
+  //
+  // @Get('google/redirect')
+  // @UseGuards(GoogleAuthGuard)
+  // googleAuthRedirect(@Req() req): GoogleSignInResponse | undefined {
+  //   return this.authService.googleSignIn(req);
+  // }
 }
