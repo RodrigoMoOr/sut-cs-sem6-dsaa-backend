@@ -7,6 +7,7 @@ import { UserDTO } from '../../dto/user.dto';
 import { toUserDTO } from '../../../shared/helpers/mapper';
 import { CreateUserDTO } from '../../dto/create-user.dto';
 import { SignInDTO } from '../../../auth/dto/sign-in.dto';
+import { matchCypheredText } from '../../../shared/helpers/cypher-matcher';
 
 @Injectable()
 export class UserService {
@@ -26,8 +27,8 @@ export class UserService {
     const existingUser = await this.userRepository.findOne({ where: { username: signInDTO.username } });
     if (!existingUser) throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
 
-    Logger.log('existing pass', existingUser.password);
-    if (existingUser.password != signInDTO.password)
+    Logger.log(`Passwords match: ${matchCypheredText(signInDTO.password, existingUser.password)}`);
+    if (!matchCypheredText(signInDTO.password, existingUser.password))
       throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
 
     return toUserDTO(existingUser);
