@@ -22,9 +22,9 @@ export class BooksController {
     @Query('limit') limit = 10,
     @Query() filtersDTO: GetFilteredBooksDTO,
   ): Observable<Pagination<Book>> | Promise<Book[]> {
-    if (Object.keys(filtersDTO).length) {
-      return this.bookService.findByFilter(filtersDTO);
-    }
+    // if (Object.keys(filtersDTO).length) {
+    //   return this.bookService.findByFilter(filtersDTO);
+    // }
     return this.bookService.findAllPaginate({ page, limit, route: 'localhost:3000/books' });
   }
 
