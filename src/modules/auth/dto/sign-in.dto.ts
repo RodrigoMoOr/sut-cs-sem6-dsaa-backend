@@ -1,7 +1,7 @@
 import { IsNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class SignInDTO {
+export class SignInDto {
   @ApiProperty({
     description: 'Unique username (emaiL)',
   })

@@ -1,6 +1,6 @@
 import { ApiModelProperty } from '@nestjs/swagger/dist/decorators/api-model-property.decorator';
 
-export class SignInResponseDTO {
+export class SignInResponseDto {
   @ApiModelProperty({})
   accessToken: string;
 }

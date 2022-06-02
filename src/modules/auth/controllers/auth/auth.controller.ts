@@ -1,10 +1,10 @@
 import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from '../../services/auth/auth.service';
 import { ApiTags } from '@nestjs/swagger';
-import { UserDTO } from '../../../user/dto/user.dto';
+import { UserDto } from '../../../user/dto/user.dto';
 import { CreateUserDTO } from '../../../user/dto/create-user.dto';
 import { LocalAuthGuard } from '../../guards/local-auth.guard';
-import { SignInResponse } from '../../interfaces/sign-in.interface';
+import { SignInResponseDto } from '../../dto/sign-in-response.dto';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -13,12 +13,12 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('sign-in')
-  signIn(@Req() req): Promise<SignInResponse> {
+  signIn(@Req() req): Promise<SignInResponseDto> {
     return this.authService.signIn(req.user);
   }
 
   @Post('sign-up')
-  signUp(@Body() user: CreateUserDTO): Promise<UserDTO> {
+  signUp(@Body() user: CreateUserDTO): Promise<UserDto> {
     return this.authService.signUp(user);
   }
 
