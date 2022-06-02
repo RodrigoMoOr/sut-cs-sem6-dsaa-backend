@@ -1,29 +1,50 @@
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
-import { CreateUser } from '../../interfaces/user.interface';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../../entities/user.entity';
 import { UpdateUserDto } from '../../dto/update-user.dto';
+import { UserDto } from '../../dto/user.dto';
+import { CreateUserDTO } from '../../dto/create-user.dto';
+import { SignInDto } from '../../../auth/dto/sign-in.dto';
+import { toUserDto } from '../../helpers/mapper';
+import { matchCypheredText } from '../../helpers/cypher-matcher';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
+  constructor(
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    private readonly jwtService: JwtService,
+  ) {}
 
-  async create(user: CreateUser): Promise<User> {
+  async create(user: CreateUserDTO): Promise<UserDto> {
+    const existingUser = await this.userRepository.findOne({ where: { username: user.username } });
+    if (existingUser) throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
+
     const createdUser = await this.userRepository.create(user);
-    Logger.log('SIGN UP RES: ', createdUser.id, createdUser.email);
+    await this.userRepository.save(createdUser);
 
-    if (!createdUser) throw new HttpException('Error creating user', HttpStatus.SERVICE_UNAVAILABLE);
-
-    return createdUser;
+    return toUserDto(createdUser);
   }
 
-  async findByUsername(username: string): Promise<User> {
-    return await this.userRepository.findOne({ where: { username: username } });
+  async findByUsername(signInDTO: SignInDto): Promise<UserDto> {
+    const existingUser = await this.userRepository.findOne({ where: { username: signInDTO.username } });
+    if (!existingUser) throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
+
+    if (!matchCypheredText(signInDTO.password, existingUser.password))
+      throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+
+    return toUserDto(existingUser);
   }
 
   async findById(id: number): Promise<User> {
     return await this.userRepository.findOne(id);
+  }
+
+  async findByIdFromJWT(authHeader: string): Promise<UserDto> {
+    const token = this.jwtService.decode(authHeader.split(' ')[1]);
+    const user = await this.userRepository.findOne(token.sub);
+    return toUserDto(user);
   }
 
   async updateUser(user: UpdateUserDto): Promise<User> {
