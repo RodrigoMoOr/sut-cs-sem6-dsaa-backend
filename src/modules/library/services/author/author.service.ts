@@ -4,17 +4,20 @@ import { Author } from '../../entities/author.entity';
 import { Repository } from 'typeorm';
 import { IPaginationOptions, paginate, Pagination } from 'nestjs-typeorm-paginate';
 import { from, map, Observable } from 'rxjs';
+import { AuthorDto } from '../../dto/author.dto';
+import { toAuthorDto } from '../../helpers/mapper';
 
 @Injectable()
 export class AuthorService {
   constructor(@InjectRepository(Author) private readonly authorRepository: Repository<Author>) {}
 
-  findOne(id: number): Promise<Author | null> {
-    return this.authorRepository.findOneOrFail(id);
+  async findOne(id: number): Promise<AuthorDto | null> {
+    return toAuthorDto(await this.authorRepository.findOneOrFail(id));
   }
 
-  findAll(): Promise<Author[]> {
-    return this.authorRepository.find();
+  async findAll(): Promise<AuthorDto[]> {
+    const authors = await this.authorRepository.find();
+    return authors.map(author => toAuthorDto(author));
   }
 
   findAllPaginated(options: IPaginationOptions): Observable<Pagination<Author>> {

@@ -18,7 +18,7 @@ export class BooksController {
 
   @Get()
   @ApiQuery({ name: 'page', required: false, example: 2, description: 'requested page' })
-  @ApiQuery({ name: 'limit', required: false, example: 10 })
+  @ApiQuery({ name: 'limit', required: false, example: 10, description: 'items per page' })
   @ApiQuery({ name: 'sortBy', required: false, enum: ['title', 'price', 'publisher', 'genre', 'author'] })
   @ApiQuery({ name: 'sortOrder', required: false, enum: ['asc', 'desc'] })
   @ApiOkResponse({ description: 'Fetched books from DB', type: [BookDto] })
