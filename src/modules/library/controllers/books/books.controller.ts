@@ -1,10 +1,10 @@
 import { Body, Controller, Get, Param, Put, Query } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { BookService } from '../../services/book/book.service';
 import { Book } from '../../entities/book.entity';
-import { GetFilteredBooksDTO } from '../../dto/get-filtered-books.dto';
 import { Observable } from 'rxjs';
 import { Pagination } from 'nestjs-typeorm-paginate';
+import { BookDto } from '../../dto/book.dto';
 
 @ApiTags('Books')
 @Controller('books')
@@ -17,14 +17,20 @@ export class BooksController {
   }
 
   @Get()
+  @ApiQuery({ name: 'page', required: false, example: 2, description: 'requested page' })
+  @ApiQuery({ name: 'limit', required: false, example: 10 })
+  @ApiQuery({ name: 'sortBy', required: false, enum: ['title', 'price', 'publisher', 'genre', 'author'] })
+  @ApiQuery({ name: 'sortOrder', required: false, enum: ['asc', 'desc'] })
+  @ApiOkResponse({ description: 'Fetched books from DB', type: [BookDto] })
   getBooks(
     @Query('page') page = 1,
     @Query('limit') limit = 10,
-    @Query() filtersDTO: GetFilteredBooksDTO,
+    @Query('sortBy') sortBy?: string,
+    @Query('sortOrder') sortOrder?: string,
   ): Observable<Pagination<Book>> | Promise<Book[]> {
-    // if (Object.keys(filtersDTO).length) {
-    //   return this.bookService.findByFilter(filtersDTO);
-    // }
+    if (sortBy && sortOrder) {
+      return this.bookService.sortBooks(sortBy, sortOrder);
+    }
     return this.bookService.findAllPaginate({ page, limit, route: 'localhost:3000/books' });
   }
 

@@ -26,6 +26,68 @@ export class BookService {
     return from(paginate<Book>(this.bookRepository, options)).pipe(map((books: Pagination<Book>) => books));
   }
 
+  sortBooks(sortBy: string, sortOrder: string): Promise<Book[]> {
+    if (sortBy === 'title' && sortOrder === 'desc') {
+      return this.bookRepository.find({
+        order: {
+          title: 'DESC',
+        },
+      });
+    }
+    if (sortBy === 'title' && sortOrder === 'asc') {
+      {
+        return this.bookRepository.find({
+          order: { title: 'ASC' },
+        });
+      }
+    }
+    if (sortBy === 'price' && sortOrder === 'desc') {
+      return this.bookRepository.find({
+        order: {
+          price: 'DESC',
+        },
+      });
+    }
+    if (sortBy === 'price' && sortOrder === 'asc') {
+      return this.bookRepository.find({
+        order: { price: 'ASC' },
+      });
+    }
+    if (sortBy === 'rating' && sortOrder === 'desc') {
+      return this.bookRepository.find({
+        order: {
+          rating: 'DESC',
+        },
+      });
+    }
+    if (sortBy === 'rating' && sortOrder === 'asc') {
+      return this.bookRepository.find({
+        order: { rating: 'ASC' },
+      });
+    }
+    if (sortBy === 'author' && sortOrder === 'desc') {
+      return this.bookRepository.find({
+        order: { author: 'DESC' },
+      });
+    }
+    if (sortBy === 'author' && sortOrder === 'asc') {
+      return this.bookRepository.find({
+        order: { author: 'ASC' },
+      });
+    }
+    if (sortBy === 'publisher' && sortOrder === 'desc') {
+      return this.bookRepository.find({
+        order: { publisher: 'DESC' },
+      });
+    }
+    if (sortBy === 'publisher' && sortOrder === 'asc') {
+      return this.bookRepository.find({
+        order: { publisher: 'ASC' },
+      });
+    }
+    throw new HttpException('Bad sorting parameters', HttpStatus.BAD_REQUEST);
+  }
+
   async findByFilter(filters: GetFilteredBooksDTO): Promise<Book[]> {
     const { title } = filters;
 
