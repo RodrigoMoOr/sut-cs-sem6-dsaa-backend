@@ -12,7 +12,7 @@ export class AuthorsController {
   constructor(private readonly authorService: AuthorService) {}
 
   @Get(':id')
-  getAuthorById(@Param('id') id: number): Promise<Author> {
+  getAuthorById(@Param('id') id: number): Promise<AuthorDto> {
     return this.authorService.findOne(id);
   }
 

@@ -8,10 +8,14 @@ import { CreateUserDTO } from '../../dto/create-user.dto';
 import { SignInDto } from '../../../auth/dto/sign-in.dto';
 import { toUserDto } from '../../helpers/mapper';
 import { matchCypheredText } from '../../helpers/cypher-matcher';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
+  constructor(
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async create(user: CreateUserDTO): Promise<UserDto> {
     const existingUser = await this.userRepository.findOne({ where: { username: user.username } });
@@ -35,6 +39,12 @@ export class UserService {
 
   async findById(id: number): Promise<User> {
     return await this.userRepository.findOne(id);
+  }
+
+  async findByIdFromJWT(authHeader: string): Promise<UserDto> {
+    const token = this.jwtService.decode(authHeader.split(' ')[1]);
+    const user = await this.userRepository.findOne(token.sub);
+    return toUserDto(user);
   }
 
   async updateUser(user: UpdateUserDto): Promise<User> {

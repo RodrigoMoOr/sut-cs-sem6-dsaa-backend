@@ -4,8 +4,8 @@ import { AuthorService } from '../../services/author/author.service';
 import { BookService } from '../../services/book/book.service';
 import { GenreService } from '../../services/genre/genre.service';
 import { Book } from '../../entities/book.entity';
-import { Author } from '../../entities/author.entity';
 import { Genre } from '../../entities/genre.entity';
+import { AuthorDto } from '../../dto/author.dto';
 
 @ApiTags('Home')
 @Controller('home')
@@ -22,7 +22,7 @@ export class HomeController {
   }
 
   @Get('authors')
-  getHomePageAuthors(): Promise<Author[]> {
+  getHomePageAuthors(): Promise<AuthorDto[]> {
     return this.authorService.findAll();
   }
 

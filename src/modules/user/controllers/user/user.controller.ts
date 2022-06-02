@@ -1,6 +1,7 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Headers } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { UserService } from '../../services/user/user.service';
+import { UserDto } from '../../dto/user.dto';
 
 @ApiTags('User')
 @Controller('user')
@@ -8,10 +9,11 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   // TODO: re implement these methods
-  // @Get()
-  // getUser(): Promise<User> {
-  //   return this.userService.findById(id);
-  // }
+  @Get('info')
+  getUserInfo(@Headers() headers): Promise<UserDto> {
+    return this.userService.findByIdFromJWT(headers['authorization']);
+  }
+
   //
   // @Put()
   // updateUser(user: UpdateUserDto): Promise<User> {
