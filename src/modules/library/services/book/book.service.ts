@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Book } from '../../entities/book.entity';
 import { Repository } from 'typeorm';
 import { GetFilteredBooksDTO } from '../../dto/get-filtered-books.dto';
-import { GetSortedBooksDTO } from '../../dto/get-sorted-books.dto';
 import { from, map, Observable } from 'rxjs';
 import { IPaginationOptions, paginate, Pagination } from 'nestjs-typeorm-paginate';
 
@@ -27,21 +26,7 @@ export class BookService {
     return from(paginate<Book>(this.bookRepository, options)).pipe(map((books: Pagination<Book>) => books));
   }
 
-  async findByFilter(filters: GetFilteredBooksDTO): Promise<Book[]> {
-    const { title } = filters;
-
-    let books = await this.findAll();
-
-    if (title) {
-      books = books.filter(book => book.title === title);
-    }
-
-    return books;
-  }
-
-  async sortBooks(sorting: GetSortedBooksDTO): Promise<Book[]> {
-    const { sortBy, sortOrder } = sorting;
-
+  sortBooks(sortBy: string, sortOrder: string): Promise<Book[]> {
     if (sortBy === 'title' && sortOrder === 'desc') {
       return this.bookRepository.find({
         order: {
@@ -100,7 +85,21 @@ export class BookService {
         order: { publisher: 'ASC' },
       });
     }
+    throw new HttpException('Bad sorting parameters', HttpStatus.BAD_REQUEST);
   }
+
+  async findByFilter(filters: GetFilteredBooksDTO): Promise<Book[]> {
+    const { title } = filters;
+
+    let books = await this.findAll();
+
+    if (title) {
+      books = books.filter(book => book.title === title);
+    }
+
+    return books;
+  }
+
   async updateOne(book): Promise<Book> {
     const foundBook = await this.findOne(book.id);
 
