@@ -1,16 +1,11 @@
 import { Payment } from './payment.entity';
-import { CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, OneToMany, UpdateDateColumn } from 'typeorm';
+import { BaseEntity } from '../../core/entities/BaseEntity';
 
 @Entity('payment_history')
-export class PaymentHistory {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class PaymentHistory extends BaseEntity {
   @OneToMany(() => Payment, payment => payment.paymentHistory)
   payments: Payment[];
-
-  @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;

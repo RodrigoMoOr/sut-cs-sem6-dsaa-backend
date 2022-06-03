@@ -1,16 +1,14 @@
 import { PaymentHistory } from './payment-history.entity';
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { PaymentType } from './payment-type.entity';
+import { BaseEntity } from '../../core/entities/BaseEntity';
 
 @Entity('payment')
-export class Payment {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Payment extends BaseEntity {
   @Column()
   date: Date;
 
-  @OneToMany(() => PaymentType, (paymentType) => paymentType.payments)
+  @OneToMany(() => PaymentType, paymentType => paymentType.payments)
   @JoinColumn()
   paymentType: PaymentType;
 

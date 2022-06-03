@@ -1,22 +1,11 @@
-import {
-  BeforeInsert,
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  OneToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { BeforeInsert, Column, Entity, JoinColumn, OneToOne, UpdateDateColumn } from 'typeorm';
 import * as crypto from 'crypto';
 import { Cart } from '../../cart/entities/cart.entity';
 import { PaymentHistory } from '../../payment/entities/payment-history.entity';
+import { BaseEntity } from '../../core/entities/BaseEntity';
 
 @Entity('user')
-export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class User extends BaseEntity {
   @Column()
   name: string;
 
@@ -44,9 +33,6 @@ export class User {
   @OneToOne(() => PaymentHistory)
   @JoinColumn()
   paymentHistory: PaymentHistory;
-
-  @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
