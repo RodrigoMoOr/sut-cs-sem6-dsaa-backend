@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Author } from '../../entities/author.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { IPaginationOptions, paginate, Pagination } from 'nestjs-typeorm-paginate';
 import { from, map, Observable } from 'rxjs';
 import { AuthorDto } from '../../dto/author.dto';
@@ -22,5 +22,56 @@ export class AuthorService {
 
   findAllPaginated(options: IPaginationOptions): Observable<Pagination<Author>> {
     return from(paginate<Author>(this.authorRepository, options)).pipe(map((authors: Pagination<Author>) => authors));
+  }
+
+  async findAllPaginated2(
+    page = 1,
+    limit = 10,
+    sortBy?: string,
+    sortOrder?: string,
+    filterBy?: string,
+    filterQuery?: string,
+  ): Promise<AuthorDto[]> {
+    if (sortBy && sortOrder && filterBy && filterQuery) {
+      const authors = await this.authorRepository.findAndCount({
+        take: limit,
+        skip: (page - 1) * limit,
+        order: { [sortBy]: sortOrder },
+        where: {
+          [filterBy]: Like(filterQuery),
+        },
+      });
+
+      return authors[0].map(author => toAuthorDto(author));
+    }
+
+    if (sortBy && sortOrder) {
+      const authors = await this.authorRepository.findAndCount({
+        take: limit,
+        skip: (page - 1) * limit,
+        order: { [sortBy]: sortOrder },
+      });
+
+      return authors[0].map(author => toAuthorDto(author));
+    }
+
+    if (filterBy && filterQuery) {
+      const authors = await this.authorRepository.findAndCount({
+        take: limit,
+        skip: (page - 1) * limit,
+        where: {
+          [filterBy]: Like(filterQuery),
+        },
+      });
+
+      return authors[0].map(author => toAuthorDto(author));
+    }
+
+    const authors = await this.authorRepository.find({
+      take: limit,
+      skip: (page - 1) * limit,
+    });
+    Logger.log(typeof authors);
+    return authors.map(author => toAuthorDto(author));
   }
 }

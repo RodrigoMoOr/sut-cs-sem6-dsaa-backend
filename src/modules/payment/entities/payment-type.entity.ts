@@ -1,14 +1,12 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { Payment } from './payment.entity';
+import { BaseEntity } from '../../core/entities/BaseEntity';
 
 @Entity('payment_type')
-export class PaymentType {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class PaymentType extends BaseEntity {
   @Column()
   name: string;
 
-  @ManyToOne(() => Payment, (payment) => payment.paymentType)
+  @ManyToOne(() => Payment, payment => payment.paymentType)
   payments: Payment[];
 }

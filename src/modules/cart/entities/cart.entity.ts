@@ -1,19 +1,9 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, UpdateDateColumn } from 'typeorm';
 import { Book } from '../../library/entities/book.entity';
+import { BaseEntity } from '../../core/entities/BaseEntity';
 
 @Entity('cart')
-export class Cart {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Cart extends BaseEntity {
   @ManyToMany(() => Book)
   @JoinTable()
   books: Book[];
@@ -22,9 +12,6 @@ export class Cart {
 
   @Column()
   total: number;
-
-  @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;

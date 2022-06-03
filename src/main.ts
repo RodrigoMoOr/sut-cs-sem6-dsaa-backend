@@ -1,9 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+
   const whitelist = ['localhost:3000', '127.0.0.1', 'https://sut-sp-frontend.herokuapp.com/'];
   app.enableCors({
     origin: (origin, callback) => {

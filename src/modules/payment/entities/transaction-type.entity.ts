@@ -1,10 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity } from 'typeorm';
+import { BaseEntity } from '../../core/entities/BaseEntity';
 
 @Entity('transaction_type')
-export class TransactionType {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class TransactionType extends BaseEntity {
   @Column()
   name: string;
 }
