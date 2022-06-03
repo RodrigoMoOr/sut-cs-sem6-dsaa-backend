@@ -20,7 +20,15 @@ export class GenreController {
   @ApiQuery({ name: 'page', required: false, example: 2, description: 'requested page' })
   @ApiQuery({ name: 'limit', required: false, example: 10, description: 'items per page' })
   @ApiOkResponse({ description: 'Fetched books from DB', type: [GenreDto] })
-  getAllGenres(@Query('page') page = 1, @Query('limit') limit = 10): Observable<Pagination<Genre>> {
+  @ApiQuery({ name: 'sortOrder', required: false, enum: ['asc', 'desc'] })
+  getAllGenres(
+    @Query('page') page = 1,
+    @Query('limit') limit = 10,
+    @Query('sortOrder') sortOrder?: string,
+  ): Observable<Pagination<Genre>> | Promise<Genre[]> {
+    if (sortOrder) {
+      return this.genreService.sortGenres(sortOrder);
+    }
     return this.genreService.findAllPaginated({ page, limit, route: 'localhost:3000/genres' });
   }
 }
