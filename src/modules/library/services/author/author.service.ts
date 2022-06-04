@@ -2,8 +2,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Author } from '../../entities/author.entity';
 import { Like, Repository } from 'typeorm';
-import { IPaginationOptions, paginate, Pagination } from 'nestjs-typeorm-paginate';
-import { from, map, Observable } from 'rxjs';
 import { AuthorDto } from '../../dto/author.dto';
 import { toAuthorDto } from '../../helpers/mapper';
 
@@ -20,9 +18,9 @@ export class AuthorService {
     return authors.map(author => toAuthorDto(author));
   }
 
-  findAllPaginated(options: IPaginationOptions): Observable<Pagination<Author>> {
-    return from(paginate<Author>(this.authorRepository, options)).pipe(map((authors: Pagination<Author>) => authors));
-  }
+  // findAllPaginated(options: IPaginationOptions): Observable<Pagination<Author>> {
+  //   return from(paginate<Author>(this.authorRepository, options)).pipe(map((authors: Pagination<Author>) => authors));
+  // }
 
   async findAllPaginated2(
     page = 1,

@@ -2,8 +2,10 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Genre } from '../../entities/genre.entity';
 import { Repository } from 'typeorm';
-import { from, map, Observable } from 'rxjs';
-import { IPaginationOptions, paginate, Pagination } from 'nestjs-typeorm-paginate';
+import { PageOptionsDto } from '../../../core/dto/page-options.dto';
+import { PageDto } from '../../../core/dto/page.dto';
+import { GenreDto } from '../../dto/genre.dto';
+import { PageMetaDto } from '../../../core/dto/page-meta.dto';
 
 @Injectable()
 export class GenreService {
@@ -35,7 +37,16 @@ export class GenreService {
     throw new HttpException('Bad sorting parameters', HttpStatus.BAD_REQUEST);
   }
 
-  findAllPaginated(options: IPaginationOptions): Observable<Pagination<Genre>> {
-    return from(paginate<Genre>(this.genreRepository, options)).pipe(map((genres: Pagination<Genre>) => genres));
+  async findPaginated(pageOptionsDto: PageOptionsDto): Promise<PageDto<GenreDto>> {
+    const queryBuilder = this.genreRepository.createQueryBuilder('genre');
+
+    queryBuilder.orderBy('genre.createdAt', pageOptionsDto.order).skip(pageOptionsDto.skip).take(pageOptionsDto.take);
+
+    const itemCount = await queryBuilder.getCount();
+    const { entities } = await queryBuilder.getRawAndEntities<Genre>();
+
+    const pageMeta = new PageMetaDto({ itemCount, pageOptions: pageOptionsDto });
+
+    return new PageDto(entities, pageMeta);
   }
 }
