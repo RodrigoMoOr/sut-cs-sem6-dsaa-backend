@@ -3,9 +3,9 @@ import { ApiTags } from '@nestjs/swagger';
 import { AuthorService } from '../../services/author/author.service';
 import { BookService } from '../../services/book/book.service';
 import { GenreService } from '../../services/genre/genre.service';
-import { Book } from '../../entities/book.entity';
 import { Genre } from '../../entities/genre.entity';
 import { AuthorDto } from '../../dto/author.dto';
+import { MinimalBookDto } from '../../dto/minimal-book.dto';
 
 @ApiTags('Home')
 @Controller('home')
@@ -17,7 +17,7 @@ export class HomeController {
   ) {}
 
   @Get('books')
-  getHomePageBooks(): Promise<Book[]> {
+  getHomePageBooks(): Promise<MinimalBookDto[]> {
     return this.bookService.findAll();
   }
 

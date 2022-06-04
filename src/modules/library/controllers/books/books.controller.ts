@@ -1,7 +1,10 @@
-import { Body, Controller, Get, Param, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Put, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { BookService } from '../../services/book/book.service';
 import { Book } from '../../entities/book.entity';
+import { MinimalBookDto } from '../../dto/minimal-book.dto';
+import { PageOptionsDto } from '../../../core/dto/page-options.dto';
+import { PageDto } from '../../../core/dto/page.dto';
 
 @ApiTags('Books')
 @Controller('books')
@@ -11,6 +14,16 @@ export class BooksController {
   @Get(':id')
   getBookById(@Param('id') id: number): Promise<Book> {
     return this.bookService.findOne(id);
+  }
+
+  @Get('all')
+  getAllBooks(): Promise<MinimalBookDto[]> {
+    return this.bookService.findAll();
+  }
+
+  @Get()
+  getBook(@Query() pageOptionsDto: PageOptionsDto): Promise<PageDto<MinimalBookDto>> {
+    return this.bookService.findPaginated(pageOptionsDto);
   }
 
   // @Get()

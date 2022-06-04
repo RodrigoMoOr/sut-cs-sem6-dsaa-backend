@@ -40,7 +40,10 @@ export class GenreService {
   async findPaginated(pageOptions: PageOptionsDto): Promise<PageDto<GenreDto>> {
     const queryBuilder = this.genreRepository.createQueryBuilder('genre');
 
-    queryBuilder.orderBy('genre.createdAt', pageOptions.order).skip(pageOptions.skip).take(pageOptions.take);
+    queryBuilder
+      .orderBy(`genre.${pageOptions.orderBy}`, pageOptions.order)
+      .skip(pageOptions.skip)
+      .take(pageOptions.take);
 
     const itemCount = await queryBuilder.getCount();
     const { entities } = await queryBuilder.getRawAndEntities<Genre>();

@@ -25,7 +25,10 @@ export class AuthorService {
   async findPaginated(pageOptions: PageOptionsDto): Promise<PageDto<MinimalAuthorDto>> {
     const queryBuilder = this.authorRepository.createQueryBuilder('author');
 
-    queryBuilder.orderBy('author.createdAt', pageOptions.order).skip(pageOptions.skip).take(pageOptions.take);
+    queryBuilder
+      .orderBy(`author.${pageOptions.orderBy}`, pageOptions.order)
+      .skip(pageOptions.skip)
+      .take(pageOptions.take);
 
     const itemCount = await queryBuilder.getCount();
     const { entities } = await queryBuilder.getRawAndEntities<Author>();

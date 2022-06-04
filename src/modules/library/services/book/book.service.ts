@@ -2,7 +2,11 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Book } from '../../entities/book.entity';
 import { Repository } from 'typeorm';
-import { GetFilteredBooksDTO } from '../../dto/get-filtered-books.dto';
+import { toMinimalBookDto } from '../../helpers/mapper';
+import { MinimalBookDto } from '../../dto/minimal-book.dto';
+import { PageOptionsDto } from '../../../core/dto/page-options.dto';
+import { PageDto } from '../../../core/dto/page.dto';
+import { PageMetaDto } from '../../../core/dto/page-meta.dto';
 
 @Injectable()
 export class BookService {
@@ -16,13 +20,28 @@ export class BookService {
     return this.bookRepository.findOneOrFail(id);
   }
 
-  findAll(): Promise<Book[]> {
-    return this.bookRepository.find();
+  async findAll(): Promise<MinimalBookDto[]> {
+    const books = await this.bookRepository.find();
+    return books.map(book => toMinimalBookDto(book));
   }
 
-  // findAllPaginate(options: IPaginationOptions): Observable<Pagination<Book>> {
-  //   return from(paginate<Book>(this.bookRepository, options)).pipe(map((books: Pagination<Book>) => books));
-  // }
+  async findPaginated(pageOptions: PageOptionsDto): Promise<PageDto<MinimalBookDto>> {
+    const queryBuilder = this.bookRepository.createQueryBuilder('book');
+
+    queryBuilder
+      .orderBy(`book.${pageOptions.orderBy}`, pageOptions.order)
+      .skip(pageOptions.skip)
+      .take(pageOptions.take);
+
+    const itemCount = await queryBuilder.getCount();
+    const { entities } = await queryBuilder.getRawAndEntities<Book>();
+
+    const books = entities.map(ent => toMinimalBookDto(ent));
+
+    const pageMeta = new PageMetaDto({ itemCount, pageOptions });
+
+    return new PageDto(books, pageMeta);
+  }
 
   sortBooks(sortBy: string, sortOrder: string): Promise<Book[]> {
     if (sortBy === 'title' && sortOrder === 'desc') {
@@ -84,18 +103,6 @@ export class BookService {
       });
     }
     throw new HttpException('Bad sorting parameters', HttpStatus.BAD_REQUEST);
-  }
-
-  async findByFilter(filters: GetFilteredBooksDTO): Promise<Book[]> {
-    const { title } = filters;
-
-    let books = await this.findAll();
-
-    if (title) {
-      books = books.filter(book => book.title === title);
-    }
-
-    return books;
   }
 
   async updateOne(book): Promise<Book> {
