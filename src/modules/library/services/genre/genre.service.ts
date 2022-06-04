@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Genre } from '../../entities/genre.entity';
 import { Repository } from 'typeorm';
@@ -15,6 +15,24 @@ export class GenreService {
 
   findAll(): Promise<Genre[]> {
     return this.genreRepository.find();
+  }
+
+  sortGenres(sortOrder: string): Promise<Genre[]> {
+    if (sortOrder === 'asc') {
+      return this.genreRepository.find({
+        order: {
+          name: 'ASC',
+        },
+      });
+    }
+    if (sortOrder === 'desc') {
+      return this.genreRepository.find({
+        order: {
+          name: 'DESC',
+        },
+      });
+    }
+    throw new HttpException('Bad sorting parameters', HttpStatus.BAD_REQUEST);
   }
 
   findAllPaginated(options: IPaginationOptions): Observable<Pagination<Genre>> {
