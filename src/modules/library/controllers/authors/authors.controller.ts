@@ -1,7 +1,10 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
-import { ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { AuthorService } from '../../services/author/author.service';
 import { AuthorDto } from '../../dto/author.dto';
+import { PageDto } from '../../../core/dto/page.dto';
+import { PageOptionsDto } from '../../../core/dto/page-options.dto';
+import { MinimalAuthorDto } from '../../dto/minimal-author.dto';
 
 @ApiTags('Authors')
 @Controller('authors')
@@ -14,10 +17,8 @@ export class AuthorsController {
   }
 
   @Get()
-  @ApiQuery({ name: 'page', required: false, example: 2, description: 'Requested page' })
-  @ApiQuery({ name: 'limit', required: false, example: 10, description: 'Items per page' })
-  @ApiOkResponse({ description: 'Fetched books from DB', type: [AuthorDto] })
-  getAllAuthors(@Query('page') page = 1, @Query('limit') limit = 10): Promise<AuthorDto[]> {
-    return this.authorService.findAllPaginated2(page, limit);
+  @ApiOkResponse({ description: 'Fetched books from DB', type: [MinimalAuthorDto] })
+  getAllAuthors(@Query('page') pageOptionsDto: PageOptionsDto): Promise<PageDto<MinimalAuthorDto>> {
+    return this.authorService.findPaginated(pageOptionsDto);
   }
 }

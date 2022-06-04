@@ -37,15 +37,15 @@ export class GenreService {
     throw new HttpException('Bad sorting parameters', HttpStatus.BAD_REQUEST);
   }
 
-  async findPaginated(pageOptionsDto: PageOptionsDto): Promise<PageDto<GenreDto>> {
+  async findPaginated(pageOptions: PageOptionsDto): Promise<PageDto<GenreDto>> {
     const queryBuilder = this.genreRepository.createQueryBuilder('genre');
 
-    queryBuilder.orderBy('genre.createdAt', pageOptionsDto.order).skip(pageOptionsDto.skip).take(pageOptionsDto.take);
+    queryBuilder.orderBy('genre.createdAt', pageOptions.order).skip(pageOptions.skip).take(pageOptions.take);
 
     const itemCount = await queryBuilder.getCount();
     const { entities } = await queryBuilder.getRawAndEntities<Genre>();
 
-    const pageMeta = new PageMetaDto({ itemCount, pageOptions: pageOptionsDto });
+    const pageMeta = new PageMetaDto({ itemCount, pageOptions });
 
     return new PageDto(entities, pageMeta);
   }

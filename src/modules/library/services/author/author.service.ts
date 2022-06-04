@@ -3,7 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Author } from '../../entities/author.entity';
 import { Like, Repository } from 'typeorm';
 import { AuthorDto } from '../../dto/author.dto';
-import { toAuthorDto } from '../../helpers/mapper';
+import { toAuthorDto, toMinimalAuthorDto } from '../../helpers/mapper';
+import { PageDto } from '../../../core/dto/page.dto';
+import { PageOptionsDto } from '../../../core/dto/page-options.dto';
+import { PageMetaDto } from '../../../core/dto/page-meta.dto';
+import { MinimalAuthorDto } from '../../dto/minimal-author.dto';
 
 @Injectable()
 export class AuthorService {
@@ -18,9 +22,20 @@ export class AuthorService {
     return authors.map(author => toAuthorDto(author));
   }
 
-  // findAllPaginated(options: IPaginationOptions): Observable<Pagination<Author>> {
-  //   return from(paginate<Author>(this.authorRepository, options)).pipe(map((authors: Pagination<Author>) => authors));
-  // }
+  async findPaginated(pageOptions: PageOptionsDto): Promise<PageDto<MinimalAuthorDto>> {
+    const queryBuilder = this.authorRepository.createQueryBuilder('author');
+
+    queryBuilder.orderBy('author.createdAt', pageOptions.order).skip(pageOptions.skip).take(pageOptions.take);
+
+    const itemCount = await queryBuilder.getCount();
+    const { entities } = await queryBuilder.getRawAndEntities<Author>();
+
+    const authors = entities.map(ent => toMinimalAuthorDto(ent));
+
+    const pageMeta = new PageMetaDto({ itemCount, pageOptions });
+
+    return new PageDto(authors, pageMeta);
+  }
 
   async findAllPaginated2(
     page = 1,
