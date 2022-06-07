@@ -11,6 +11,7 @@ export const toMinimalAuthorDto = (data: Author): MinimalAuthorDto => {
     name: data.name,
     surname: data.surname,
     bio: data.bio,
+    imageUrl: data.imageUrl,
   };
 };
 

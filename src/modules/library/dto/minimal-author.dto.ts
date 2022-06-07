@@ -12,4 +12,7 @@ export class MinimalAuthorDto {
 
   @ApiProperty()
   bio: string;
+
+  @ApiProperty()
+  imageUrl: string;
 }
