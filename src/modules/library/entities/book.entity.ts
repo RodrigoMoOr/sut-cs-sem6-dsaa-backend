@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { Author } from './author.entity';
 import { Genre } from './genre.entity';
 import { BaseEntity } from '../../core/entities/BaseEntity';
@@ -20,7 +20,7 @@ export class Book extends BaseEntity {
   @Column()
   description: string;
 
-  @Column()
+  @Column({ name: 'cover_image_url' })
   coverImageURL: string;
 
   @Column()
@@ -29,15 +29,17 @@ export class Book extends BaseEntity {
   @Column()
   publisher: string;
 
-  @Column()
+  @Column({ name: 'release_date' })
   releaseData: Date;
 
   @Column()
   rating: number;
 
   @ManyToOne(() => Author, author => author.books)
+  @JoinColumn({ name: 'author_id' })
   author: Author;
 
   @ManyToOne(() => Genre, genre => genre.books)
+  @JoinColumn({ name: 'genre_id' })
   genre: Genre;
 }

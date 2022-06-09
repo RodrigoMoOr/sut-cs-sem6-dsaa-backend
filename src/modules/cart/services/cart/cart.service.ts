@@ -4,28 +4,32 @@ import { Cart } from '../../entities/cart.entity';
 import { Repository } from 'typeorm';
 import { CreateCartDto } from '../../dto/create-cart.dto';
 import { UpdateCartDto } from '../../dto/update-cart.dto';
+import { CartDto } from '../../dto/cart.dto';
+import { toCartDto } from '../../helpers/mapper';
 
 @Injectable()
 export class CartService {
   constructor(@InjectRepository(Cart) private readonly cartRepository: Repository<Cart>) {}
 
-  async create(cart: CreateCartDto): Promise<Cart> {
+  async create(cart: CreateCartDto): Promise<CartDto> {
     const createdCart = await this.cartRepository.create(cart);
 
     if (!createdCart) throw new HttpException('Error creating cart for user', HttpStatus.SERVICE_UNAVAILABLE);
 
-    return createdCart;
+    return toCartDto(createdCart);
   }
 
-  async findOne(id: number): Promise<Cart> {
-    const foundCart = await this.cartRepository.findOne(id);
+  async findOne(id: number): Promise<CartDto> {
+    const foundCart = await this.cartRepository.findOne(id, {
+      relations: ['books'],
+    });
 
     if (!foundCart) throw new HttpException('Cart not found', HttpStatus.NOT_FOUND);
 
-    return foundCart;
+    return toCartDto(foundCart);
   }
 
-  async update(cart: UpdateCartDto): Promise<Cart> {
+  async update(cart: UpdateCartDto): Promise<CartDto> {
     const existingCart = await this.findOne(cart.id);
 
     await this.cartRepository.update(existingCart.id, cart);

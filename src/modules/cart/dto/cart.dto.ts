@@ -1,12 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { BookDto } from '../../library/dto/book.dto';
 
 export class CartDto {
   @ApiProperty()
   id: number;
 
-  @ApiProperty()
-  books: BookDto[];
+  // @ApiProperty()
+  // books: BookDto[];
 
   @ApiProperty()
   totalItems: number;
