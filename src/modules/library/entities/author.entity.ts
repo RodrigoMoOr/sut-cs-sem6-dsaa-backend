@@ -17,6 +17,9 @@ export class Author extends BaseEntity {
   @Column({ name: 'image_url' })
   imageUrl: string;
 
+  @Column({ nullable: true, name: 'is_popular', default: false })
+  isPopular: boolean;
+
   @OneToMany(() => Book, book => book.author)
   books: Book[];
 

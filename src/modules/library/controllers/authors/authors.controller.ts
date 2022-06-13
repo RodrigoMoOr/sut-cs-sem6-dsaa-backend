@@ -18,7 +18,13 @@ export class AuthorsController {
 
   @Get()
   @ApiOkResponse({ description: 'Fetched books from DB', type: [MinimalAuthorDto] })
-  getAllAuthors(@Query() pageOptionsDto: PageOptionsDto): Promise<PageDto<MinimalAuthorDto>> {
+  getAuthors(@Query() pageOptionsDto: PageOptionsDto): Promise<PageDto<MinimalAuthorDto>> {
     return this.authorService.findPaginated(pageOptionsDto);
+  }
+
+  @Get('all')
+  @ApiOkResponse({ description: 'Fetched books from DB', type: [MinimalAuthorDto] })
+  getAllAuthors(): Promise<AuthorDto[]> {
+    return this.authorService.findAll();
   }
 }

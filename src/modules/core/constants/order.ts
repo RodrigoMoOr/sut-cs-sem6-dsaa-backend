@@ -10,4 +10,5 @@ export enum OrderBy {
   RATING = 'rating',
   NAME = 'name',
   PUBLISHER = 'publisher',
+  CREATED_AT = 'created_at',
 }

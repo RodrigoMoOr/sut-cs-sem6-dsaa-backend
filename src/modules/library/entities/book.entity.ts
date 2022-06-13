@@ -35,6 +35,9 @@ export class Book extends BaseEntity {
   @Column()
   rating: number;
 
+  @Column({ name: 'is_best_seller', nullable: true, default: false })
+  isBestSeller: boolean;
+
   @ManyToOne(() => Author, author => author.books)
   @JoinColumn({ name: 'author_id' })
   author: Author;
