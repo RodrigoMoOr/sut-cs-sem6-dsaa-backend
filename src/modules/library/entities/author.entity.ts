@@ -20,6 +20,9 @@ export class Author extends BaseEntity {
   @Column({ nullable: true, name: 'is_popular', default: false })
   isPopular: boolean;
 
+  @Column({ nullable: true, name: 'is_best_seller', default: false })
+  isBestSeller: boolean;
+
   @OneToMany(() => Book, book => book.author)
   books: Book[];
 

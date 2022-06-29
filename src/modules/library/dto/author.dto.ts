@@ -1,4 +1,3 @@
-import { BookDto } from './book.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { GenreDto } from './genre.dto';
 
@@ -18,8 +17,8 @@ export class AuthorDto {
   @ApiProperty()
   imageUrl: string;
 
-  @ApiProperty()
-  books: BookDto[];
+  // @ApiProperty()
+  // books: BookDto[];
 
   @ApiProperty()
   genres: GenreDto[];

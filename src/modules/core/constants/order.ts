@@ -11,4 +11,6 @@ export enum OrderBy {
   NAME = 'name',
   PUBLISHER = 'publisher',
   CREATED_AT = 'created_at',
+  IS_POPULAR = 'is_popular',
+  IS_BEST_SELLER = 'is_best_seller',
 }

@@ -1,12 +1,12 @@
-import { Column, Entity, JoinTable, ManyToMany, UpdateDateColumn } from 'typeorm';
-import { Book } from '../../library/entities/book.entity';
+import { Column, Entity, UpdateDateColumn } from 'typeorm';
 import { BaseEntity } from '../../core/entities/BaseEntity';
 
 @Entity('cart')
 export class Cart extends BaseEntity {
-  @ManyToMany(() => Book)
-  @JoinTable()
-  books: Book[];
+  // @ManyToMany(() => Book)
+  // @JoinTable()
+  // books: Book[];
+
   @Column()
   totalItems: number;
 

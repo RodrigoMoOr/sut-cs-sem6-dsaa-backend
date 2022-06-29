@@ -21,7 +21,7 @@ export const toAuthorDto = (data: Author): AuthorDto => {
     name: data.name,
     surname: data.surname,
     bio: data.bio,
-    books: data.books.map(book => toBookDto(book)),
+    // books: data.books.map(book => toBookDto(book)),
     genres: data.genres,
     imageUrl: data.imageUrl,
   };
